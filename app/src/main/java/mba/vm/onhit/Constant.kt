@@ -4,7 +4,8 @@ import android.content.pm.PackageManager
 
 class Constant {
     companion object {
-        const val NFC_SERVICE_PACKAGE_NAME = "com.android.nfc"
+        const val AOSP_NFC_SERVICE_PACKAGE_NAME = "com.android.nfc"
+        const val SAMSUNG_NFC_SERVICE_PACKAGE_NAME = "com.samsung.android.nfc"
         // Hide on Android API
         const val PACKAGE_MANAGER_FEATURE_NFC_ANY = "android.hardware.nfc.any"
         const val BROADCAST_TAG_EMULATOR_REQUEST = "${BuildConfig.APPLICATION_ID}.TAG_EMULATOR_REQUEST"
@@ -16,6 +17,7 @@ class Constant {
         const val MAX_OF_BROADCAST_SIZE = 1048576
         const val GITHUB_URL = "https://github.com/0penPublic/onHit"
 
+        val NFC_SERVICE_PACKAGE_NAMES = setOf(AOSP_NFC_SERVICE_PACKAGE_NAME, SAMSUNG_NFC_SERVICE_PACKAGE_NAME)
         val PACKAGE_MANAGER_SYSTEM_NFC_FEATURES = setOf(PackageManager.FEATURE_NFC, PACKAGE_MANAGER_FEATURE_NFC_ANY)
     }
 }
