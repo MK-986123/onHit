@@ -6,7 +6,6 @@ import android.nfc.NdefMessage
 import android.os.Bundle
 import android.os.Handler
 import androidx.core.content.ContextCompat
-import de.robv.android.xposed.XposedHelpers.findClass
 import io.github.kyuubiran.ezxhelper.core.finder.MethodFinder
 import io.github.kyuubiran.ezxhelper.core.helper.ObjectHelper.`-Static`.objectHelper
 import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
@@ -30,8 +29,16 @@ object NfcServiceHook : BaseHook() {
 
     override fun init(classLoader: ClassLoader) {
         nfcClassLoader = classLoader
-        tagEndpointInterface = findClass($$"com.android.nfc.DeviceHost$TagEndpoint", nfcClassLoader)
-        MethodFinder.fromClass("com.android.nfc.NfcApplication", nfcClassLoader)
+        tagEndpointInterface = findFirstAvailableClass(
+            "com.android.nfc.DeviceHost\$TagEndpoint",
+            "com.samsung.android.nfc.DeviceHost\$TagEndpoint"
+        )
+        MethodFinder.fromClass(
+            findFirstAvailableClass(
+                "com.android.nfc.NfcApplication",
+                "com.samsung.android.nfc.NfcApplication"
+            )
+        )
             .filterByName("onCreate")
             .first()
             .createHook {
@@ -61,6 +68,15 @@ object NfcServiceHook : BaseHook() {
                     }
                 }
             }
+    }
+
+    private fun findFirstAvailableClass(vararg names: String): Class<*> {
+        names.forEach { name ->
+            runCatching {
+                return Class.forName(name, false, nfcClassLoader)
+            }
+        }
+        error("Unable to find any NFC class from: ${names.joinToString()}")
     }
 
     fun dispatchFakeTag(

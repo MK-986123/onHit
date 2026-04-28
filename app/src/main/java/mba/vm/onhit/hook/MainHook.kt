@@ -5,14 +5,14 @@ import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import io.github.kyuubiran.ezxhelper.xposed.EzXposed
 import mba.vm.onhit.BuildConfig
-import mba.vm.onhit.Constant.Companion.NFC_SERVICE_PACKAGE_NAME
+import mba.vm.onhit.Constant.Companion.NFC_SERVICE_PACKAGE_NAMES
 
 class MainHook : IXposedHookLoadPackage {
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         EzXposed.initHandleLoadPackage(lpparam)
         when (lpparam.packageName) {
-            NFC_SERVICE_PACKAGE_NAME -> {
+            in NFC_SERVICE_PACKAGE_NAMES -> {
                 initHook(lpparam.classLoader, NfcServiceHook, NfcDispatchManagerHook, PackageManagerHook)
             }
             else -> initHook(lpparam.classLoader, PackageManagerHook)

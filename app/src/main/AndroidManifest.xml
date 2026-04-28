@@ -78,7 +78,7 @@
             android:value="82" />
         <meta-data
             android:name="xposedscope"
-            android:value="com.android.nfc" />
+            android:value="com.android.nfc,com.samsung.android.nfc" />
     </application>
 
 </manifest>
